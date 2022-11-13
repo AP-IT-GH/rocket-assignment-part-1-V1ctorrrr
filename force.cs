@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Security.Cryptography;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class force : MonoBehaviour
 {
@@ -12,6 +12,7 @@ public class force : MonoBehaviour
     void Start()
     {
         rb = this.gameObject.GetComponent<Rigidbody>();
+        SceneManager.UnloadScene("Level2");
     }
 
     // Update is called once per frame
@@ -20,23 +21,17 @@ public class force : MonoBehaviour
         var snelheid = 4f;
         if (Input.GetKey(KeyCode.Space))
         {
-            rb.AddForce(new Vector3(0, 10f), ForceMode.Force);
+            rb.AddRelativeForce(new Vector3(0, 1000 * Time.deltaTime, 0), ForceMode.Force);
         }
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow)||Input.GetKey("d"))
         {
-            rb.AddForce(0, 0, snelheid, ForceMode.Force);
+            transform.Rotate(new Vector3(5, 0, 0) * snelheid * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow)||Input.GetKey("q"))
         {
-            rb.AddForce(0,0, -snelheid,ForceMode.Force);
+            transform.Rotate(new Vector3(-5, 0, 0) * snelheid * Time.deltaTime);
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.transform.tag == "pickup")
-        {
-            rb.AddForce(new Vector3(0, 0), ForceMode.Force);
-        }
-    }
+    
 }
